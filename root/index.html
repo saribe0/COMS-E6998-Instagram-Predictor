@@ -3,6 +3,7 @@
 	<head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/style.css?version=1">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 		<script type="text/javascript" src="js/facebook.js"></script>
 		<title>InstaAnalysis</title>
 	</head>
@@ -13,8 +14,12 @@
 			</div>
       <div class="login">
         <h1> Login </h1>
-					<button type="self_login" id="self_Login">Login with InstaAnalysis</button>
-					<fb:login-button scope="public_profile,email" onlogin="checkLoginState();"> </fb:login-button>
+					<div class="login_button">
+						<button type="self_login" id="self_Login">Login with InstaAnalysis</button>
+					</div>
+					<div class="login_button">
+						<div class="fb-login-button" data-width="300px" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="true"></div>
+					</div>
       </div>
     </div>
 	</body>
