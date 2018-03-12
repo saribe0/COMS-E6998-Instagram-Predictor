@@ -29,6 +29,8 @@ body {
 	padding-left: 30px;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	border-bottom: 2px;
+	border-color: #000000;
 }
 
 .login {

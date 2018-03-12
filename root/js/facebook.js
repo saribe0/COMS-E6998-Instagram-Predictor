@@ -3,7 +3,7 @@ window.fbAsyncInit = function() {
     appId      : '195418547899109',
     cookie     : true,
     xfbml      : true,
-    version    : '1.0'
+    version    : 'v1.0'
   });
   FB.AppEvents.logPageView();
 };
@@ -25,4 +25,8 @@ function checkLoginState() {
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
   });
+}
+
+function statusChangeCallback() {
+  
 }
