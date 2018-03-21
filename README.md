@@ -8,7 +8,7 @@ http://insta-analysis-project.s3-website.us-east-2.amazonaws.com/#
 ## Current Status
 * Added login buttons for InstaAnalysis, Google, Facebook, and Amazon
   * InstaAnalysis works for: Both
-  * Google works for: http
+  * Google works for: http  (Currently commented out)
   * Facebook works for: https
   * Amazon works for: https
 * Once logged in, nothing happens
