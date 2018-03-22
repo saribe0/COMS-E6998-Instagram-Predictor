@@ -10,7 +10,7 @@ var credentialKeys = [
 // When page loads, check to see if credentials
 // - are saved for the session. If so, refresh and
 // - continue to next page.
-$(window).load(function() {
+$(window).on('load', function() {
   var loggedIn = true;
   credentialKeys.forEach(function(key) {
     if (sessionStorage.getItem(key) == null) {

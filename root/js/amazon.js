@@ -14,7 +14,7 @@ document.getElementById('LoginWithAmazon').onclick = function() {
   options = { scope : 'profile' };
   amazon.Login.authorize(options, function(response) {
     if ( response.error ) {
-      console.log('There was a problem logging in with Amazon.')
+      console.log('There was a problem logging in with Amazon.');
       alert('oauth error ' + response.error);
       return;
     }
@@ -40,6 +40,6 @@ document.getElementById('LoginWithAmazon').onclick = function() {
 		}
   });
 
-  alert('success: ' + response.access_token);
+  console.log('success: ' + response.access_token);
   });
 };

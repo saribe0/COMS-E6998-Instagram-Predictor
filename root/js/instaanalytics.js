@@ -17,7 +17,7 @@ $(window).load(function() {
 					grant_type: 'authorization_code',
 					client_id: '73p9hpm79uolerj3gp8gekqf61',
 				 	code: code,
-				 	redirect_uri: 'https://s3.us-east-2.amazonaws.com/big-data-columbia/index.html'
+				 	redirect_uri: 'https://s3.us-east-2.amazonaws.com/big-data-columbia/login.html'
 				},
 				headers:{
 					'Content-Type': 'application/x-www-form-urlencoded'
@@ -51,10 +51,11 @@ $(window).load(function() {
 				},
 				error: function(data) {
 					console.log(data);
-          console.log('There was a problem logging in with InstaAnalytics')
+          console.log('There was a problem logging in with InstaAnalytics');
 				}
 			});
 		}
 		else {
 			console.log('No code, must be redirect for login');
 		}
+  });

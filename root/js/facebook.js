@@ -28,7 +28,7 @@ function checkLoginState() {
 
 function statusChangeCallback(response) {
   if (response.authResponse) {
-    console.log('You are now logged in with Facebook.')
+    console.log('You are now logged in with Facebook.');
 
     // Add the FB token to Cognito
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
