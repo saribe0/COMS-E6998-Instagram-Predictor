@@ -65,10 +65,10 @@ body {
 	height: 100%;
 	font-size: 16px;
 	border-radius: 5px;
-	background-color: #ffc266;
-	border-color: #ffc266;
+	background-color: #4d94ff;
+	border-color: #4d94ff;
 	border-radius: 4px;
   font-weight: 500;
-  color: darkslategrey;
+  color: white;
 	cursor: pointer;
 }

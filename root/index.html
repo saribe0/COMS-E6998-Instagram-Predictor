@@ -3,11 +3,6 @@
 	<head>
     <meta charset="UTF-8">
 
-		<!-- Google API Info -->
-		<!--
-		<meta name="google-signin-client_id" content="348290036841-8aj3c77sdcj5o9ai98pesdapoddtjbbc.apps.googleusercontent.com">
-		-->
-
 		<!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css?version=1">
 
@@ -15,46 +10,14 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
 		<!-- Internal JavaScripts -->
+		<script type="text/javascript" src="js/index.js"></script>
 		<script type="text/javascript" src="js/facebook.js"></script>
-		<!--
-		<script type="text/javascript" src="js/google.js"></script>
-		-->
 		<script type="text/javascript" src="js/sdk/aws-sdk.min.js"></script>
 		<script type="text/javascript" src="js/sdk/aws-sdk.js"></script>
 
 		<title>InstaAnalysis</title>
 	</head>
 	<body>
-		<div id="amazon-root"></div>
-    <div class="background">
-			<div class="title">
-				<h1>InstaAnalysis</h1>
-			</div>
-      <div class="login">
-        <h1> Login </h1>
-				<div class="login_button">
-					<input id="self_Login" type="button" onclick="location.href='https://insta-analysis.auth.us-east-2.amazoncognito.com/login?response_type=code&client_id=73p9hpm79uolerj3gp8gekqf61&redirect_uri=https://s3.us-east-2.amazonaws.com/insta-analysis-project/index.html';" value="Log In with InstaAnalysis" />
-				</div>
-				<div class="login_button">
-					<div class="fb-login-button" data-width="300px" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-				</div>
-				<!--
-				<div class="login_button">
-					<div id="my-signin2"></div>
-      	</div>
-				-->
-				<div class="login_button" id="login_button_aws">
-					<a href="#" id="LoginWithAmazon">
-						<img border="0" alt="Login with Amazon"
-						src="http://g-ecx.images-amazon.com/images/G/01/lwa/btnLWA_drkgry_312x64.png"
-						width="300" height="61.5"/>
-					</a>
-      	</div>
-			</div>
-    </div>
-		<script type="text/javascript" src="js/amazon.js"></script>
-		<!--
-		<script src="https://apis.google.com/js/platform.js?onload=renderGoogleButton" async defer></script>
-		-->
+
 	</body>
 </html>

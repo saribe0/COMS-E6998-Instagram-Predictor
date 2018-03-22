@@ -26,6 +26,34 @@ function checkLoginState() {
   });
 }
 
-function statusChangeCallback() {
+function statusChangeCallback(response) {
+  if (response.authResponse) {
+    console.log('You are now logged in with Facebook.')
 
+    // Add the FB token to Cognito
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: IDENTITYPOOLID,
+      Logins: {
+        'graph.facebook.com': response.authResponse.accessToken
+      }
+    });
+
+    // Obtain AWS credentials
+    AWS.config.credentials.get(function(err) {
+      if (err) {
+				console.log(err);
+			}
+			else {
+				console.log('Secret: ' + AWS.config.credentials.secretAccessKey);
+				console.log('Access: ' + AWS.config.credentials.accessKeyId);
+        console.log('Token : ' + AWS.config.credentials.sessionToken);
+				console.log('Facebook Authentication Complete.');
+
+        loginSaveCognitoCredentials();
+
+			}
+    });
+  } else {
+    console.log('There was a problem logging in with Facebook.');
+  }
 }

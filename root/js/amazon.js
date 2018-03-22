@@ -11,8 +11,35 @@ window.onAmazonLoginReady = function() {
 })(document);
 
 document.getElementById('LoginWithAmazon').onclick = function() {
-  console.log("Testing");
   options = { scope : 'profile' };
-  amazon.Login.authorize(options, 'https://s3.us-east-2.amazonaws.com/insta-analysis-project/index.html');
-  return false;
+  amazon.Login.authorize(options, function(response) {
+    if ( response.error ) {
+      console.log('There was a problem logging in with Amazon.')
+      alert('oauth error ' + response.error);
+      return;
+    }
+
+  // User is loged in here, create AWS credentials
+  AWS.config.credentials = new AWS. CognitoIdentityCredentials({
+    IdentityPoolId: IDENTITYPOOLID,
+    Logins: {
+      'www.amazon.com': response.access_token
+    }
+  });
+  AWS.config.credentials.get(function(err){
+    if (err) {
+			console.log(err);
+		}
+		else {
+      console.log('Secret: ' + AWS.config.credentials.secretAccessKey);
+      console.log('Access: ' + AWS.config.credentials.accessKeyId);
+      console.log('Token : ' + AWS.config.credentials.sessionToken);
+      console.log('Amazon Authentication Complete.');
+
+      loginSaveCognitoCredentials();
+		}
+  });
+
+  alert('success: ' + response.access_token);
+  });
 };
