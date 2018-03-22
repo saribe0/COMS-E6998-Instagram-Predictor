@@ -48,10 +48,6 @@ if($('body').is('.login_page')) {
 }
 
 function amazonLogout() {
-  amazon.Login.logout(function(response) {
-    console.log(response);
-    
-    // Segue to login page
-    redirectToNotLoggedIn();
-  });
+  amazon.Login.logout();
+  redirectToNotLoggedIn();
 }
