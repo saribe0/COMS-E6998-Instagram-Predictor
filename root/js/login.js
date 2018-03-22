@@ -1,3 +1,4 @@
+var APPNAME = 'https://s3.us-east-2.amazonaws.com/insta-analysis-project'
 AWS.config.region = 'us-east-2';
 var IDENTITYPOOLID = 'us-east-2:d25f8632-adf0-4b5f-a263-0520438fef64';
 
@@ -6,6 +7,11 @@ var credentialKeys = [
   'secretAccessKey',
   'sessionToken'
 ];
+
+// Once logged in, redirect to logged in view
+function redirectToLoggedIn() {
+  window.location = APPNAME + '/index.html';
+}
 
 // When page loads, check to see if credentials
 // - are saved for the session. If so, refresh and
@@ -17,15 +23,21 @@ $(window).on('load', function() {
       loggedIn = false;
     }
   });
+  if (sessionStorage.getItem('type') == null) {
+    loggedIn = false;
+  }
+  console.log('Logged in: ' + loggedIn);
   if (!loggedIn) {
     console.log('Currently not logged in.');
   } else {
     console.log('Stored credentials were found, verifying.');
 
     // Load the credentials
+    AWS.config.credentials = new AWS.Credentials();
     credentialKeys.forEach(function(key) {
       AWS.config.credentials[key] = sessionStorage.getItem(key);
     });
+    identityType = sessionStorage.getItem('type');
 
     // Verify the credentials are valid
     AWS.config.credentials.get(function(err) {
@@ -45,17 +57,13 @@ $(window).on('load', function() {
 
 // This function is called by other scripts once
 // - they have successfully logged in with Cognito
-function loginSaveCognitoCredentials() {
+function loginSaveCognitoCredentials(type) {
   credentialKeys.forEach(function(key) {
     sessionStorage.setItem(key, AWS.config.credentials[key]);
   });
   sessionStorage.setItem('region', AWS.config.region);
+  sessionStorage.setItem('type', type);
 
   console.log('Credentials saved, ready for segue to next page!');
   redirectToLoggedIn();
-}
-
-// Once logged in, redirect to logged in view
-function redirectToLoggedIn() {
-  window.location.replace = '../index.html';
 }

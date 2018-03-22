@@ -7,8 +7,12 @@ window.fbAsyncInit = function() {
   });
   FB.AppEvents.logPageView();
 
+  // Log the user in
   FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
+      // Split login and logouts
+      if($('body').is('.login_page')) {
+        statusChangeCallback(response);
+      }
   });
 };
 
@@ -49,11 +53,20 @@ function statusChangeCallback(response) {
         console.log('Token : ' + AWS.config.credentials.sessionToken);
 				console.log('Facebook Authentication Complete.');
 
-        loginSaveCognitoCredentials();
-
+        loginSaveCognitoCredentials('Facebook');
 			}
     });
   } else {
     console.log('There was a problem logging in with Facebook.');
   }
+}
+
+function facebookLogout() {
+  var done = false;
+  FB.logout(function(response) {
+    console.log(response);
+
+    // Segue to login page
+    redirectToNotLoggedIn();
+  });
 }

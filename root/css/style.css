@@ -29,6 +29,18 @@ body {
 	padding-left: 30px;
 	padding-top: 10px;
 	padding-bottom: 10px;
+  padding-right: 30px;
 	border-bottom: 2px;
 	border-color: #000000;
+  position: relative;
+  display: flex;
+}
+
+#logout {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translate(-250%, -125%);
+  vertical-align: middle;
+  cursor: pointer;
 }
