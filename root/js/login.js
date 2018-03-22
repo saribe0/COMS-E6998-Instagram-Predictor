@@ -37,12 +37,11 @@ $(window).on('load', function() {
         });
       } else {
         console.log('Credentials successfully loaded and/or refreshed.');
+        redirectToLoggedIn();
       }
     });
   }
 });
-
-
 
 // This function is called by other scripts once
 // - they have successfully logged in with Cognito
@@ -53,4 +52,10 @@ function loginSaveCognitoCredentials() {
   sessionStorage.setItem('region', AWS.config.region);
 
   console.log('Credentials saved, ready for segue to next page!');
+  redirectToLoggedIn();
+}
+
+// Once logged in, redirect to logged in view
+function redirectToLoggedIn() {
+  window.location.replace = '../index.html';
 }
