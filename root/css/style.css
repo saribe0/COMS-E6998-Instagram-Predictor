@@ -7,6 +7,13 @@ body {
 	line-height: 1.3;
 	overflow: hidden;
 	margin: 0px;
+	text-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+	left: 50%;
+	position: relative;
+	transform: translate(-50%, -7px);
 }
 
 .background {
@@ -25,7 +32,6 @@ body {
 	z-index: 2;
 	background-color: #ffffff;
 	box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
-	text-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
 	padding-left: 30px;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -43,4 +49,47 @@ body {
   transform: translate(-250%, -125%);
   vertical-align: middle;
   cursor: pointer;
+}
+
+.action {
+	width: 90%;
+	height: auto;
+	margin: auto;
+	padding: 15px;
+	margin: 20px;
+	transform: translate(10px, 0px);
+	background-color: white;
+	position: relative;
+	border-radius: 10px;
+	box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+}
+
+.stat-block {
+	width: 100%;
+	margin-top: 15px;
+	display: flex;
+}
+
+.button {
+	cursor: pointer;
+	height: 30px;
+	display: flex;
+}
+
+.stats h4,
+.stats p {
+	display: inline;
+}
+
+.stats {
+	width: 50%;
+}
+.num {
+	width: 25%;
+}
+
+table{
+	border-collapse: collapse;
+	width: 100%;
+	text-align: left;
 }

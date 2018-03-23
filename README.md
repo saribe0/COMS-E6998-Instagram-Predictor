@@ -32,3 +32,6 @@ https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin </br
 https://developers.google.com/identity/sign-in/web/build-button </br>
 #### Facebook
 https://developers.facebook.com/apps/ </br>
+
+
+https://stackoverflow.com/questions/10881511/instagram-api-how-to-get-all-user-media
