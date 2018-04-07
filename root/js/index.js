@@ -124,7 +124,7 @@ function checkInstagramInformation() {
         console.log(result);
 
         // Hide the connect ot instagram button
-        $('.login-instagram').hide();
+        $('.login-instagram').none();
 
         // Clean the url to remove the code
         window.history.pushState({}, document.title, "/insta-analysis-project/index.html" );
@@ -146,7 +146,7 @@ function checkInstagramInformation() {
   else {
     verifyInstagramConnection();
   }
-});
+}
 
 // On load, register the handler for the logout button.
 $(window).on('load', function() {

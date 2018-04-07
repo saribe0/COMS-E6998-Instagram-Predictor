@@ -53,12 +53,8 @@ h3 {
 }
 
 .action {
-	width: 90%;
-	height: auto;
-	margin: auto;
 	padding: 15px;
 	margin: 20px;
-	transform: translate(10px, 0px);
 	background-color: white;
 	position: relative;
 	border-radius: 10px;
@@ -66,7 +62,7 @@ h3 {
 }
 
 #login-instagram {
-	display: hidden;
+	display: none;
 }
 
 .stat-block {
