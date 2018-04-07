@@ -20,12 +20,12 @@ function verifyInstagramConnection() {
   // button is hidden.
   var body = {
     requestType: "CheckAuthentication",
-    user: AWS.config.credentials.sessionToken.identityId
+    user: AWS.config.credentials.identityId
   };
   apigClient.instaPost(null, body).then(function(result) {
       console.log(result);
 
-      if (/* not logged in */) {
+      if (false/* not logged in */) {
         $('.login-instagram').show().css('display', 'flex');
       }
 
@@ -87,18 +87,21 @@ $(window).on('load', function() {
 								sessionToken: AWS.config.credentials.sessionToken,
 								region: 'us-east-1'
 							});
+
+        // Once the API client is setup, check for any instagram
+        // connection stuff.
+        checkInstagramInformation();
       }
     });
-
-    // Once AWS is set up, check for Instagram account info
-    verifyInstagramConnection();
   }
 });
 
-// On load, handle instagram login if a login code is
-// in the url. Send the code to AWS throug API Gateway
-// to complete the authorization flow.
-$(window).on('load', function() {
+// Handle instagram login if a login code is
+// in the url. Send the code to AWS through API Gateway
+// to complete the authorization flow. If code is not
+// in url, check for error messages and previous Insgram
+// data.
+function checkInstagramInformation() {
 
   // Run this if the url has a signature that could
   // contain the code.
@@ -115,7 +118,7 @@ $(window).on('load', function() {
     var body = {
       requestType: "Authenticate",
       code: code,
-      user: AWS.config.credentials.sessionToken.identityId
+      user: AWS.config.credentials.identityId
     };
     apigClient.instaPost(null, body).then(function(result) {
         console.log(result);
@@ -137,6 +140,11 @@ $(window).on('load', function() {
     // available in the url though.)
     var error = window.location.href.split('?error=')[1];
 		console.log(error);
+  }
+  // Else, probably just a normal request, so validate
+  // current instagram data.
+  else {
+    verifyInstagramConnection();
   }
 });
 
