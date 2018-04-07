@@ -1,20 +1,47 @@
 var APPNAME = 'https://s3.us-east-2.amazonaws.com/insta-analysis-project'
+var apigClient = null;
 
+var InstaClientID = 'd50144dc0378478c849bff2ae3c3abf5'
 var identityType = '';
 var credentialKeys = [
   'accessKeyId',
   'secretAccessKey',
-  'sessionToken'
+  'sessionToken',
+  'identityId'
 ];
+
+// Sends off an API request to verify the user has valid
+// instagram credentials.
+function verifyInstagramConnection() {
+
+  // Send request to AWS API Gateway to check to see if
+  // the user is logged into instagram and/or has a valid
+  // token. If not, display connect button. By default the
+  // button is hidden.
+  var body = {
+    requestType: "CheckAuthentication",
+    user: AWS.config.credentials.sessionToken.identityId
+  };
+  apigClient.instaPost(null, body).then(function(result) {
+      console.log(result);
+
+      if (/* not logged in */) {
+        $('.login-instagram').show().css('display', 'flex');
+      }
+
+  }).catch(function(result) {
+      console.log(result);
+  });
+}
 
 // If not logged in, redirect to login page
 function redirectToNotLoggedIn() {
   window.location = APPNAME + '/login.html';
 }
 
-// When page loads, check to see if credentials
-// - are saved for the session. If so, refresh and
-// - continue. If not, clear them and send to login.
+// When page loads, check to see if AWS credentials
+// are saved for the session. If so, refresh and
+// continue. If not, clear them and send to login.
 $(window).on('load', function() {
   var loggedIn = true;
   credentialKeys.forEach(function(key) {
@@ -53,16 +80,75 @@ $(window).on('load', function() {
         redirectToNotLoggedIn();
       } else {
         console.log('Credentials successfully loaded and/or refreshed.');
+
+        apigClient = apigClientFactory.newClient({
+								accessKey: AWS.config.credentials.accessKeyId,
+								secretKey: AWS.config.credentials.secretAccessKey,
+								sessionToken: AWS.config.credentials.sessionToken,
+								region: 'us-east-1'
+							});
       }
     });
+
+    // Once AWS is set up, check for Instagram account info
+    verifyInstagramConnection();
   }
 });
 
+// On load, handle instagram login if a login code is
+// in the url. Send the code to AWS throug API Gateway
+// to complete the authorization flow.
 $(window).on('load', function() {
+
+  // Run this if the url has a signature that could
+  // contain the code.
+  if (window.location.href.includes('?code=')) {
+
+    // Get the potential code from the url
+    var codeRaw = window.location.href.split('?');
+		var code = codeRaw[1].split('=')[1];
+		console.log(code);
+
+    // Use the code to call the API Gateway to complete
+    // login. All other AWS interaction will be done through
+    // the API Gateway and Lambda functions.
+    var body = {
+      requestType: "Authenticate",
+      code: code,
+      user: AWS.config.credentials.sessionToken.identityId
+    };
+    apigClient.instaPost(null, body).then(function(result) {
+        console.log(result);
+
+        // Hide the connect ot instagram button
+        $('.login-instagram').hide();
+
+        // Clean the url to remove the code
+        window.history.pushState({}, document.title, "/insta-analysis-project/index.html" );
+
+  	}).catch(function(result) {
+        console.log(result)
+  	});
+  }
+  // Else if there's an error
+  else if (window.location.href.includes('?error=')) {
+
+    // Get the error message and print to console (also
+    // available in the url though.)
+    var error = window.location.href.split('?error=')[1];
+		console.log(error);
+  }
+});
+
+// On load, register the handler for the logout button.
+$(window).on('load', function() {
+
+  // Logout handler
   document.getElementById('logout').onclick = function() {
 
     // Clear AWS credentials
     AWS.config.credentials = null;
+    apigClient = null;
 
     // Clear sessionStorage
     credentialKeys.forEach(function(key) {
@@ -86,4 +172,23 @@ $(window).on('load', function() {
         break;
     }
   }
+});
+
+// Register the handler for the Connect to Instagram button.
+// The button is not shown by default.
+$(window).on('load', function() {
+
+  // Login with instagram
+  document.getElementById('login-instagram').onclick = function() {
+
+    console.log("Login clicked");
+
+    // Redirect user to instagram
+    var instagramRedirect = "https://api.instagram.com/oauth/authorize/?" +
+        "client_id=" + InstaClientID +
+        "&redirect_uri=" + APPNAME + "/index.html" +
+        "&response_type=code";
+
+    location.href = instagramRedirect;
+  };
 });

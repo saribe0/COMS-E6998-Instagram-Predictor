@@ -44,6 +44,7 @@ $(window).on('load', function() {
                 console.log('Secret: ' + AWS.config.credentials.secretAccessKey);
                 console.log('Access: ' + AWS.config.credentials.accessKeyId);
                 console.log('Token : ' + AWS.config.credentials.sessionToken);
+                console.log('IdentityId: ' + AWS.config.credentials.identityId);
                 console.log('InstaAnalytics Authentication Complete.');
 
                 loginSaveCognitoCredentials('InstaAnalytics');

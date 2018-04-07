@@ -5,7 +5,8 @@ var IDENTITYPOOLID = 'us-east-2:d25f8632-adf0-4b5f-a263-0520438fef64';
 var credentialKeys = [
   'accessKeyId',
   'secretAccessKey',
-  'sessionToken'
+  'sessionToken',
+  'identityId'
 ];
 
 // Once logged in, redirect to logged in view

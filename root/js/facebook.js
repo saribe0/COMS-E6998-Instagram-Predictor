@@ -51,6 +51,7 @@ function statusChangeCallback(response) {
 				console.log('Secret: ' + AWS.config.credentials.secretAccessKey);
 				console.log('Access: ' + AWS.config.credentials.accessKeyId);
         console.log('Token : ' + AWS.config.credentials.sessionToken);
+        console.log('IdentityId: ' + AWS.config.credentials.identityId);
 				console.log('Facebook Authentication Complete.');
 
         loginSaveCognitoCredentials('Facebook');
