@@ -25,7 +25,7 @@ function verifyInstagramConnection() {
   apigClient.instaPost(null, body).then(function(result) {
       console.log(result);
 
-      if (false/* not logged in */) {
+      if (true/* not logged in */) {
         $('.login-instagram').show().css('display', 'flex');
       }
 
