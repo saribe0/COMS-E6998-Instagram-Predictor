@@ -25,6 +25,15 @@ h3 {
 	z-index: 1;
 }
 
+#content {
+	overflow: auto;
+	position: absolute;
+  top: 85px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 .title {
 	top: 0px;
 	left: 0px;
