@@ -24,11 +24,15 @@ function verifyInstagramConnection() {
   };
   apigClient.instaPost(null, body).then(function(result) {
       console.log(result);
-
-      if (true/* not logged in */) {
-        $('.login-instagram').show().css('display', 'flex');
+      // Show the login box if there was an error or authentication failed.
+      // Also alert if an error was recieved.
+      if (result.data.responseType == "Error") {
+        window.alert(result.data.responseType + ": " + result.data.responseDetails);
+        $('#login-instagram').show().css('display', 'flex');
       }
-
+      if (result.data.authenticated == false) {
+        $('#login-instagram').show().css('display', 'flex');
+      }
   }).catch(function(result) {
       console.log(result);
   });
@@ -123,8 +127,18 @@ function checkInstagramInformation() {
     apigClient.instaPost(null, body).then(function(result) {
         console.log(result);
 
-        // Hide the connect ot instagram button
-        $('.login-instagram').none();
+        // If there was an error with the request, alert the user.
+        if (result.data.responseType == "Error") {
+          window.alert(result.data.responseType + ": " + result.data.responseDetails);
+
+          // Continue with normal checks if failed
+          verifyInstagramConnection();
+        }
+        // Otherwise, hide the login button and clean the url
+        else {
+          // Hide the connect ot instagram button
+          $('#login-instagram').hide();
+        }
 
         // Clean the url to remove the code
         window.history.pushState({}, document.title, "/insta-analysis-project/index.html" );
@@ -139,6 +153,7 @@ function checkInstagramInformation() {
     // Get the error message and print to console (also
     // available in the url though.)
     var error = window.location.href.split('?error=')[1];
+    window.alert(error);
 		console.log(error);
   }
   // Else, probably just a normal request, so validate
