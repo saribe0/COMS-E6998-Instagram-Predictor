@@ -10,6 +10,18 @@ var credentialKeys = [
   'identityId'
 ];
 
+// Monitor the progress of instagram as it's refreshed in
+// the backend
+async function monitorRefresh() {
+
+  // Sleep for 1/4 of a second then check the status
+  await sleep(500);
+
+  // Call to check the status. If still refreshing, call
+  // this function again until the fresh is done. When
+  // done, stop the refresh from spinning.
+}
+
 // Sends off an API request to verify the user has valid
 // instagram credentials.
 function verifyInstagramConnection() {
@@ -223,21 +235,24 @@ $(window).on('load', function() {
   document.getElementById('refresh').onclick = function() {
 
     console.log("Refreshing");
+    $('#refresh_icon').toggleClass('rotated');
 
     // Send request to AWS API Gateway to start the refresh
     var body = {
       requestType: "Refresh",
       user: AWS.config.credentials.identityId
     };
-    apigClient.instaGet(null, body).then(function(result) {
+    apigClient.instaPut(null, body).then(function(result) {
         console.log(result);
 
-        // Verify an error was not return
+        // If an error was returned, stop rotation and inform the user
         if (result.data.responseType == "Error") {
+          $('#refresh_icon').toggleClass('rotated');
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
         }
         else {
-          $('#refresh_icon').toggleClass('rotated');
+          // Call monitor refresh function
+          monitorRefresh();
         }
     }).catch(function(result) {
         console.log(result);
