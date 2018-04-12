@@ -103,3 +103,18 @@ table{
 	width: 100%;
 	text-align: left;
 }
+
+#refresh {
+	height: 30px;
+  width: 30px;
+	top: 0px;
+  right: 0px;
+  position: absolute;
+  margin: 8px;
+  border-radius: inherit;
+}
+
+#refresh_icon {
+	max-width: 100%;
+  height: auto;
+}
