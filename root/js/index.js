@@ -215,3 +215,32 @@ $(window).on('load', function() {
     location.href = instagramRedirect;
   };
 });
+
+// Register the handler for the refresh button. The button
+// calls refresh from the instagram API.
+$(window).on('load', function() {
+
+  document.getElementById('refresh').onclick = function() {
+
+    console.log("Refreshing");
+
+    // Send request to AWS API Gateway to start the refresh
+    var body = {
+      requestType: "Refresh",
+      user: AWS.config.credentials.identityId
+    };
+    apigClient.instaGet(null, body).then(function(result) {
+        console.log(result);
+
+        // Verify an error was not return
+        if (result.data.responseType == "Error") {
+          window.alert(result.data.responseType + ": " + result.data.responseDetails);
+        }
+        else {
+          $('#refresh_icon').toggleClass('rotated');
+        }
+    }).catch(function(result) {
+        console.log(result);
+    });
+  };
+});

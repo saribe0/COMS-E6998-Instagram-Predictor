@@ -117,4 +117,14 @@ table{
 #refresh_icon {
 	max-width: 100%;
   height: auto;
+	cursor: pointer;
+}
+
+.rotated {
+    transform-origin:50% 50%;
+    animation:2s rotateRight infinite linear;
+}
+
+@keyframes rotateRight{
+    100%{ transform:rotate(360deg); }
 }
