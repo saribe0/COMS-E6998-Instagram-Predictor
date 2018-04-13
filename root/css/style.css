@@ -37,6 +37,7 @@ h3 {
 #content_inner {
 	width: 100%;
 	max-width: 850px;
+	margin: auto;
 }
 
 .title {
