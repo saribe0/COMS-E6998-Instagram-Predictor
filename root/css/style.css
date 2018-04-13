@@ -86,16 +86,13 @@ h3 {
 	display: flex;
 }
 
+#display_image {
+	width: 100%;
+}
+
 .stats h4,
 .stats p {
 	display: inline;
-}
-
-.stats {
-	width: 50%;
-}
-.num {
-	width: 25%;
 }
 
 table{
