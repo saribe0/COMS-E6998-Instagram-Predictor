@@ -131,3 +131,16 @@ table{
 @keyframes rotateRight{
     100%{ transform:rotate(360deg); }
 }
+
+#about {
+	margin-top: 20px
+}
+
+#about_h2 {
+	-webkit-margin-before: 0em;
+}
+
+#about_p {
+	-webkit-margin-before: 0em;
+	-webkit-margin-after: 0em;
+}
