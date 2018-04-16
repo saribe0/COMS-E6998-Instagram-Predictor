@@ -11,6 +11,7 @@ var credentialKeys = [
 ];
 
 var keepRefreshing = false;
+var hasModelDefault = true;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -25,15 +26,16 @@ async function monitorRefresh() {
     user: AWS.config.credentials.identityId
   };
 
-  while (keepRefreshing) {
+  if (keepRefreshing) {
 
     // Sleep for 1/4 of a second then check the status
     await sleep(250);
+    console.log("Checking model status");
 
     // Call to check the status. If still refreshing, call
     // this function again until the fresh is done.
     // Send request to AWS API Gateway to start the refresh
-    apigClient.instaModelStatus(null, body).then(function(result) {
+    apigClient.modelGetStatusPost(null, body).then(function(result) {
         console.log(result);
 
         // If an error was returned, stop rotation and inform the user
@@ -48,15 +50,18 @@ async function monitorRefresh() {
 
           // If the model has finished training
           if (!modelInTraining) {
+            console.log("Finished building model");
             keepRefreshing = false;
             hasInstagramModel(hasModel, false);
           }
+          else {
+            var completedImages = result.data.modelStatus.completedImages;
+            var totalImages = result.data.modelStatus.totalImages;
 
-          var completedImages = result.data.modelStatus.completedImages;
-          var totalImages = result.data.modelStatus.totalImages;
-
-          // If the model has not finished training
-          console.log("Completed " + completedImages.toString() + " of " + totalImages.toString());
+            // If the model has not finished training
+            console.log("Completed " + completedImages.toString() + " of " + totalImages.toString());
+            monitorRefresh();
+          }
         }
     }).catch(function(result) {
         console.log(result);
@@ -80,6 +85,13 @@ function connectedToInstagram(isConnected) {
 }
 
 function hasInstagramModel(hasModel, trainingInProgress) {
+
+  if (hasModel == null) {
+    hasModel = hasModelDefault;
+  }
+  else {
+    hasModelDefault = hasModel;
+  }
 
   // Show and hide the different action boxes
   if (hasModel && trainingInProgress) {
@@ -375,6 +387,7 @@ $(window).on('load', function() {
   document.getElementById('train-model').onclick = function() {
 
     console.log("Training Model");
+    hasInstagramModel(null, true);
 
     // Send request to AWS API Gateway to start the refresh
     var body = {
@@ -392,7 +405,7 @@ $(window).on('load', function() {
           // Call monitor refresh function
           var hasModel = result.data.hasModel;
           var modelInTraining = result.data.trainingInProgress;
-          hasInstagramModel(hasModel, trainingInProgress);
+          hasInstagramModel(hasModel, modelInTraining);
         }
     }).catch(function(result) {
         console.log(result);
@@ -414,7 +427,7 @@ $(window).on('load', function() {
       requestType: "CancelModel",
       user: AWS.config.credentials.identityId
     };
-    apigClient.modelcancelPost(null, body).then(function(result) {
+    apigClient.modelCancelPost(null, body).then(function(result) {
         console.log(result);
 
         // If an error was returned, inform the user
@@ -424,7 +437,7 @@ $(window).on('load', function() {
         else {
           // Call monitor refresh function
           var hasModel = result.data.hasModel;
-          hasInstagramModel(hasModel, false)
+          hasInstagramModel(hasModel, false);
         }
     }).catch(function(result) {
         console.log(result);
