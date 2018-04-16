@@ -27,7 +27,7 @@
 		<script type="text/javascript" src="js/facebook.js"></script>
 		<script type="text/javascript" src="js/instaanalytics.js"></script>
 
-		<script type="text/javascript" src="js/index.js"></script>
+		<!-- <script type="text/javascript" src="js/index.js"></script> -->
 
 		<title>Image Analysis</title>
 	</head>
@@ -67,20 +67,17 @@
 				<div class="action button" id="add-photo">
 					<h3>Analyze A New Image</h3>
 				</div>
+				<div class="action button" id="train-model">
+					<h3 id="train-model-text">Current Model Status: . Retrain?</h3>
+				</div>
+				<div class="action button" id="cancel-model">
+					<h3>You have a model being trained. Click here to cancel it.</h3>
+				</div>
 				<div class="action button" id="login-instagram">
 					<h3>Connect Your Instagram Account</h3>
 				</div>
-				<div class="action">
-					<table>
-						<th>Image</th>
-						<th>Date</th>
-						<th>Likes</th>
-						<th>Comments</th>
-						<th>Tags</th>
-					</table>
-					<div id="refresh">
-						<img id="refresh_icon" src="./media/refresh_icon.png">
-					</div>
+				<div class="action button" id="disconnect-instagram">
+					<h3>Disconnect Instagram</h3>
 				</div>
 				<div>
 			</div>

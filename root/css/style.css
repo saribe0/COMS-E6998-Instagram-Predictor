@@ -80,6 +80,10 @@ h3 {
 	display: none;
 }
 
+#cancel-model {
+	display: none;
+}
+
 .stat-block {
 	width: 100%;
 	margin-top: 15px;
@@ -147,4 +151,12 @@ table{
 
 .image {
 	text-align: center;
+}
+
+#build_model {
+	padding: 0px;
+}
+
+.model_action {
+	padding: 10px;
 }

@@ -10,16 +10,106 @@ var credentialKeys = [
   'identityId'
 ];
 
+var keepRefreshing = false;
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Monitor the progress of instagram as it's refreshed in
 // the backend
 async function monitorRefresh() {
 
-  // Sleep for 1/4 of a second then check the status
-  await sleep(500);
+  var body = {
+    requestType: "GetStatus",
+    user: AWS.config.credentials.identityId
+  };
 
-  // Call to check the status. If still refreshing, call
-  // this function again until the fresh is done. When
-  // done, stop the refresh from spinning.
+  while (keepRefreshing) {
+
+    // Sleep for 1/4 of a second then check the status
+    await sleep(250);
+
+    // Call to check the status. If still refreshing, call
+    // this function again until the fresh is done.
+    // Send request to AWS API Gateway to start the refresh
+    apigClient.instaModelStatus(null, body).then(function(result) {
+        console.log(result);
+
+        // If an error was returned, stop rotation and inform the user
+        if (result.data.responseType == "Error") {
+          window.alert(result.data.responseType + ": " + result.data.responseDetails);
+        }
+        else {
+
+          // Call monitor refresh function
+          var hasModel = result.data.hasModel;
+          var modelInTraining = result.data.modelStatus.inProgress;
+
+          // If the model has finished training
+          if (!modelInTraining) {
+            keepRefreshing = false;
+            hasInstagramModel(hasModel, false);
+          }
+
+          var completedImages = result.data.modelStatus.completedImages;
+          var totalImages = result.data.modelStatus.totalImages;
+
+          // If the model has not finished training
+          console.log("Completed " + completedImages.toString() + " of " + totalImages.toString());
+        }
+    }).catch(function(result) {
+        console.log(result);
+    });
+  }
+}
+
+// Simple function to handle toggling between connected and disconnected
+// from Instagram
+function connectedToInstagram(isConnected) {
+
+  // Show and hide the different action boxes
+  if (isConnected) {
+    $('#login-instagram').hide();
+    $('#disconnect-instagram').show().css('display', 'flex');
+  }
+  else {
+    $('#login-instagram').show().css('display', 'flex');
+    $('#disconnect-instagram').hide();
+  }
+}
+
+function hasInstagramModel(hasModel, trainingInProgress) {
+
+  // Show and hide the different action boxes
+  if (hasModel && trainingInProgress) {
+    $('#add-photo').show().css('display', 'flex');
+    $('#cancel-model').show().css('display', 'flex');
+    keepRefreshing = true;
+    monitorRefresh();
+    $('#train-model').hide();
+  }
+  else if (hasModel && !trainingInProgress) {
+    $('#add-photo').show().css('display', 'flex');
+    document.getElementById("train-model-text").innerHTML = "Valid Model Found. Re-Train?";
+    keepRefreshing = false;
+    $('#train-model').show().css('display', 'flex');
+    $('#cancel-model').hide();
+  }
+  else if (!hasModel && trainingInProgress) {
+    $('#add-photo').hide();
+    $('#train-model').hide();
+    $('#cancel-model').show().css('display', 'flex');
+    keepRefreshing = true;
+    monitorRefresh();
+  }
+  else {
+    $('#add-photo').hide();
+    document.getElementById("train-model-text").innerHTML = "No Valid Model Found. Train One Now?";
+    $('#train-model').show().css('display', 'flex');
+    keepRefreshing = false;
+    $('#cancel-model').hide();
+  }
 }
 
 // Sends off an API request to verify the user has valid
@@ -40,11 +130,17 @@ function verifyInstagramConnection() {
       // Also alert if an error was recieved.
       if (result.data.responseType == "Error") {
         window.alert(result.data.responseType + ": " + result.data.responseDetails);
-        $('#login-instagram').show().css('display', 'flex');
+        connectedToInstagram(false);
       }
       if (result.data.authenticated == false) {
-        $('#login-instagram').show().css('display', 'flex');
+        connectedToInstagram(false);
       }
+
+      // If the user is connectd, get the users model and training status
+      var userHasModel = result.data.hasModel;
+      var modelInTraining = result.data.trainingInProgress;
+      hasInstagramModel(userHasModel, modelInTraining);
+
   }).catch(function(result) {
       console.log(result);
   });
@@ -139,6 +235,9 @@ function checkInstagramInformation() {
     apigClient.instaPost(null, body).then(function(result) {
         console.log(result);
 
+        // Clean the url to remove the code
+        window.history.pushState({}, document.title, "/insta-analysis-project/index.html" );
+
         // If there was an error with the request, alert the user.
         if (result.data.responseType == "Error") {
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
@@ -146,14 +245,16 @@ function checkInstagramInformation() {
           // Continue with normal checks if failed
           verifyInstagramConnection();
         }
-        // Otherwise, hide the login button and clean the url
+        // Otherwise, hide the login button
         else {
           // Hide the connect ot instagram button
-          $('#login-instagram').hide();
-        }
+          connectedToInstagram(true);
 
-        // Clean the url to remove the code
-        window.history.pushState({}, document.title, "/insta-analysis-project/index.html" );
+          // Also get the users model and training status
+          var userHasModel = result.data.hasModel;
+          var modelInTraining = result.data.trainingInProgress;
+          hasInstagramModel(userHasModel, modelInTraining);
+        }
 
   	}).catch(function(result) {
         console.log(result)
@@ -228,14 +329,52 @@ $(window).on('load', function() {
   };
 });
 
+// Register the handler for the Disconnect from Instagram button.
+// This button is shown by default and disappears/appaears w the connect button.
+$(window).on('load', function() {
+
+  // Login with instagram
+  document.getElementById('disconnect-instagram').onclick = function() {
+
+    console.log("Disconnect clicked");
+
+    // Send request to AWS API Gateway to disconnect the user
+    var body = {
+      requestType: "DisconnectUser",
+      user: AWS.config.credentials.identityId
+    };
+    apigClient.instaDelete(null, body).then(function(result) {
+        console.log(result);
+        // Show the login box if there was an error or authentication failed.
+        // Also alert if an error was recieved.
+        if (result.data.responseType == "Error") {
+
+          // Unable to disconnect the user
+          window.alert(result.data.responseType + ": " + result.data.responseDetails);
+        }
+        if (result.data.authenticated == false) {
+
+          // Call monitor refresh function
+          var hasModel = result.data.hasModel;
+          var modelInTraining = result.data.trainingInProgress;
+          hasInstagramModel(hasModel, modelInTraining);
+
+          // User is disconnected
+          connectedToInstagram(false);
+        }
+    }).catch(function(result) {
+        console.log(result);
+    });
+  };
+});
+
 // Register the handler for the refresh button. The button
 // calls refresh from the instagram API.
 $(window).on('load', function() {
 
-  document.getElementById('refresh').onclick = function() {
+  document.getElementById('train-model').onclick = function() {
 
-    console.log("Refreshing");
-    $('#refresh_icon').toggleClass('rotated');
+    console.log("Training Model");
 
     // Send request to AWS API Gateway to start the refresh
     var body = {
@@ -247,12 +386,45 @@ $(window).on('load', function() {
 
         // If an error was returned, stop rotation and inform the user
         if (result.data.responseType == "Error") {
-          $('#refresh_icon').toggleClass('rotated');
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
         }
         else {
           // Call monitor refresh function
-          monitorRefresh();
+          var hasModel = result.data.hasModel;
+          var modelInTraining = result.data.trainingInProgress;
+          hasInstagramModel(hasModel, trainingInProgress);
+        }
+    }).catch(function(result) {
+        console.log(result);
+    });
+  };
+});
+
+// Register the handler for the cancel model button. The button
+// first verifies the user would like to cancel training and then
+// calls the API Gateway method to cancel training.
+$(window).on('load', function() {
+
+  document.getElementById('cancel-model').onclick = function() {
+
+    console.log("Canceling model in training");
+
+    // Send request to AWS API Gateway to start the refresh
+    var body = {
+      requestType: "CancelModel",
+      user: AWS.config.credentials.identityId
+    };
+    apigClient.modelcancelPost(null, body).then(function(result) {
+        console.log(result);
+
+        // If an error was returned, inform the user
+        if (result.data.responseType == "Error") {
+          window.alert(result.data.responseType + ": " + result.data.responseDetails);
+        }
+        else {
+          // Call monitor refresh function
+          var hasModel = result.data.hasModel;
+          hasInstagramModel(hasModel, false)
         }
     }).catch(function(result) {
         console.log(result);
