@@ -29,7 +29,7 @@ async function monitorRefresh() {
   if (keepRefreshing) {
 
     // Sleep for 1/4 of a second then check the status
-    await sleep(250);
+    await sleep(1000);
     console.log("Checking model status");
 
     // Call to check the status. If still refreshing, call
@@ -42,6 +42,9 @@ async function monitorRefresh() {
         if (result.data.responseType == "Error") {
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
         }
+        else if (result.data.hasOwnProperty("errorMessage")) {
+          window.alert(result.data.errorMessage);
+        }
         else {
 
           // Call monitor refresh function
@@ -52,11 +55,16 @@ async function monitorRefresh() {
           if (!modelInTraining) {
             console.log("Finished building model");
             keepRefreshing = false;
+            $("#cancel-model").css("background", "white")
             hasInstagramModel(hasModel, false);
           }
           else {
             var completedImages = result.data.modelStatus.completedImages;
             var totalImages = result.data.modelStatus.totalImages;
+
+            var completedPercent = completedImages / totalImages * 100;
+            var uncompletedPercent = 1 - completedPercent;
+            $("#cancel-model").css("background", "linear-gradient(90deg, #ADFF62 " + completedPercent.toString() + "%, white " + uncompletedPercent.toString() + "%)")
 
             // If the model has not finished training
             console.log("Completed " + completedImages.toString() + " of " + totalImages.toString());
@@ -143,6 +151,10 @@ function verifyInstagramConnection() {
       if (result.data.responseType == "Error") {
         window.alert(result.data.responseType + ": " + result.data.responseDetails);
         connectedToInstagram(false);
+      }
+      else if (result.data.hasOwnProperty("errorMessage")) {
+        connectedToInstagram(false);
+        window.alert(result.data.errorMessage);
       }
       if (result.data.authenticated == false) {
         connectedToInstagram(false);
@@ -257,6 +269,11 @@ function checkInstagramInformation() {
           // Continue with normal checks if failed
           verifyInstagramConnection();
         }
+        else if (result.data.hasOwnProperty("errorMessage")) {
+          window.alert(result.data.errorMessage);
+          // Continue with normal checks if failed
+          verifyInstagramConnection();
+        }
         // Otherwise, hide the login button
         else {
           // Hide the connect ot instagram button
@@ -364,6 +381,9 @@ $(window).on('load', function() {
           // Unable to disconnect the user
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
         }
+        else if (result.data.hasOwnProperty("errorMessage")) {
+          window.alert(result.data.errorMessage);
+        }
         if (result.data.authenticated == false) {
 
           // Call monitor refresh function
@@ -401,6 +421,9 @@ $(window).on('load', function() {
         if (result.data.responseType == "Error") {
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
         }
+        else if (result.data.hasOwnProperty("errorMessage")) {
+          window.alert(result.data.errorMessage);
+        }
         else {
           // Call monitor refresh function
           var hasModel = result.data.hasModel;
@@ -433,6 +456,9 @@ $(window).on('load', function() {
         // If an error was returned, inform the user
         if (result.data.responseType == "Error") {
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
+        }
+        else if (result.data.hasOwnProperty("errorMessage")) {
+          window.alert(result.data.errorMessage);
         }
         else {
           // Call monitor refresh function
