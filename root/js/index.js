@@ -29,7 +29,7 @@ async function monitorRefresh() {
   if (keepRefreshing) {
 
     // Sleep for 1/4 of a second then check the status
-    await sleep(1000);
+    await sleep(500);
     console.log("Checking model status");
 
     // Call to check the status. If still refreshing, call
@@ -85,7 +85,7 @@ function connectedToInstagram(isConnected) {
   if (isConnected) {
     $('#login-instagram').hide();
     $('#disconnect-instagram').show().css('display', 'flex');
-    $('#model-actions').show().css('display', 'flex');
+    $('#model-actions').show().css('display', 'block');
   }
   else {
     $('#login-instagram').show().css('display', 'flex');
