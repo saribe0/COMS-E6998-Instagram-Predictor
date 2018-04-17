@@ -484,8 +484,10 @@ function upload_file() {
   var file    = document.querySelector('input[type=file]').files[0];
   var reader  = new FileReader();
 
+  console.log("Adding image");
   reader.onloadend = function() {
     preview.src = reader.result;
+    $('#image-holder').show().css('display', 'flex');
   }
 
   if (file) {
@@ -493,13 +495,15 @@ function upload_file() {
   } else {
     preview.src = "";
   }
+  console.log(file);
 }
 
 // Register the handler for the analyze an image button. This lets
 // the user pick an image from their desktop, upload it to s3 (and display it)
 // and then analyzes it and returns a result
 $(window).on('load', function() {
-  document.getElementById('image-holder').onclick = function() {
+  document.getElementById('add-photo').onclick = function() {
+    console.log("Adding image");
     $('input').click();
   }
 });
