@@ -478,24 +478,67 @@ $(window).on('load', function() {
   };
 });
 
+function uploadFileAndAnalyze(image) {
+
+  // Prepare the request to the API
+  var params = {
+    requestType: "AnalyzeImage",
+    user: AWS.config.credentials.identityId,
+    image: image
+  };
+
+  // Make the API Request
+  apigClient.modelInferPost(null, body).then(function(result) {
+      console.log(result);
+
+      // If an error was returned, inform the user
+      if (result.data.responseType == "Error") {
+        window.alert(result.data.responseType + ": " + result.data.responseDetails);
+        $('#image-holder').hide();
+      }
+      else if (result.data.hasOwnProperty("errorMessage")) {
+        window.alert(result.data.errorMessage);
+        $('#image-holder').hide();
+      }
+      else {
+        // Update the view with the predicted values
+
+
+
+        //
+      }
+  }).catch(function(result) {
+      console.log(result);
+  });
+}
+
 // Actually uploads the file
 function upload_file() {
   var preview = document.getElementById('display_image');
-  var file    = document.querySelector('input[type=file]').files[0];
+  var file    = document.getElementById('upload_image').files[0];
   var reader  = new FileReader();
 
-  console.log("Adding image");
+  // Get the image
   reader.onloadend = function() {
-    preview.src = reader.result;
+
+    // The image as a base64 encoded string
+    var image = reader.result;
+
+    // Set the image on the screen
+    preview.src = image;
     $('#image-holder').show().css('display', 'flex');
+
+    // Upload and analyze the file
+    uploadFileAndAnalyze(image);
   }
 
+  // Call the read file and handle no file upload
   if (file) {
-    reader.readAsDataURL(file); //reads the data as a URL
+    reader.readAsDataURL(file);
   } else {
     preview.src = "";
+    $('#image-holder').hide();
   }
-  console.log(file);
 }
 
 // Register the handler for the analyze an image button. This lets
@@ -503,7 +546,6 @@ function upload_file() {
 // and then analyzes it and returns a result
 $(window).on('load', function() {
   document.getElementById('add-photo').onclick = function() {
-    console.log("Adding image");
-    $('input').click();
+    $('#upload_image').click();
   }
 });
