@@ -477,3 +477,29 @@ $(window).on('load', function() {
     });
   };
 });
+
+// Actually uploads the file
+function upload_file() {
+  var preview = document.getElementById('display_image');
+  var file    = document.querySelector('input[type=file]').files[0];
+  var reader  = new FileReader();
+
+  reader.onloadend = function() {
+    preview.src = reader.result;
+  }
+
+  if (file) {
+    reader.readAsDataURL(file); //reads the data as a URL
+  } else {
+    preview.src = "";
+  }
+}
+
+// Register the handler for the analyze an image button. This lets
+// the user pick an image from their desktop, upload it to s3 (and display it)
+// and then analyzes it and returns a result
+$(window).on('load', function() {
+  document.getElementById('image-holder').onclick = function() {
+    $('input').click();
+  }
+});

@@ -51,7 +51,7 @@
 								in progress. Once trained, you'll be able to upload an image and get
 								a prediction within minutes.</p>
 	    	</div>
-				<div class="action">
+				<div class="action" id="image-holder">
 					<div class="image">
 						<img id="display_image" src="https://www.w3schools.com/howto/img_lights.jpg">
 					</div>
@@ -65,6 +65,7 @@
 					</div>
 				</div>
 				<div class="action button" id="add-photo">
+					<input type="file" onchange="upload_file()">
 					<h3>Analyze A New Image</h3>
 				</div>
 				<div id="model-actions">
