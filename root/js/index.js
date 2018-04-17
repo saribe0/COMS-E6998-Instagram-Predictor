@@ -85,10 +85,12 @@ function connectedToInstagram(isConnected) {
   if (isConnected) {
     $('#login-instagram').hide();
     $('#disconnect-instagram').show().css('display', 'flex');
+    $('#model-actions').show().css('display', 'flex');
   }
   else {
     $('#login-instagram').show().css('display', 'flex');
     $('#disconnect-instagram').hide();
+    $('#model-actions').hide();
   }
 }
 
