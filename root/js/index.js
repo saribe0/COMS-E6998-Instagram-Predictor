@@ -1,4 +1,4 @@
-var APPNAME = 'https://s3.us-east-2.amazonaws.com/image-analysis-project'
+var APPNAME = 'https://s3.us-east-1.amazonaws.com/image-analysis-project'
 var apigClient = null;
 
 var InstaClientID = 'd50144dc0378478c849bff2ae3c3abf5'

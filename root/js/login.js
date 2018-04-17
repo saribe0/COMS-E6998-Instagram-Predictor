@@ -1,4 +1,4 @@
-var APPNAME = 'https://s3.us-east-2.amazonaws.com/image-analysis-project'
+var APPNAME = 'https://s3.us-east-1.amazonaws.com/image-analysis-project'
 AWS.config.region = 'us-east-2';
 var IDENTITYPOOLID = 'us-east-2:d25f8632-adf0-4b5f-a263-0520438fef64';
 

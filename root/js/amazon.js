@@ -1,6 +1,6 @@
 
 window.onAmazonLoginReady = function() {
-  amazon.Login.setClientId('amzn1.application-oa2-client.e61f6c1554d042309dbbe955fd7c22e3');
+  amazon.Login.setClientId('amzn1.application-oa2-client.c4e2e23dcc224941a585269152d89be5');
 };
 
 (function(d) {
@@ -22,7 +22,7 @@ if($('body').is('.login_page')) {
       }
 
     // User is loged in here, create AWS credentials
-    AWS.config.credentials = new AWS. CognitoIdentityCredentials({
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: IDENTITYPOOLID,
       Logins: {
         'www.amazon.com': response.access_token

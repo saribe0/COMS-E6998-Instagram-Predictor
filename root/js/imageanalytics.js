@@ -12,13 +12,13 @@ $(window).on('load', function() {
 
         // Exchange auth code for token
   			$.ajax({
-  				url: "https://insta-analysis.auth.us-east-2.amazoncognito.com/oauth2/token",
+  				url: "https://image-analysis.auth.us-east-2.amazoncognito.com/oauth2/token",
   				type: 'post',
   				data: {
   					grant_type: 'authorization_code',
   					client_id: '73p9hpm79uolerj3gp8gekqf61',
   				 	code: code,
-  				 	redirect_uri: 'https://s3.us-east-2.amazonaws.com/insta-analysis-project/login.html'
+  				 	redirect_uri: 'https://s3.us-east-1.amazonaws.com/image-analysis-project/login.html'
   				},
   				headers:{
   					'Content-Type': 'application/x-www-form-urlencoded'
