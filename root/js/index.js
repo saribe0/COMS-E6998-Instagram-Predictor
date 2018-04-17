@@ -409,7 +409,8 @@ $(window).on('load', function() {
   document.getElementById('train-model').onclick = function() {
 
     console.log("Training Model");
-    hasInstagramModel(null, true);
+    $('#cancel-model').show().css('display', 'flex');
+    $('#train-model').hide();
 
     // Send request to AWS API Gateway to start the refresh
     var body = {
@@ -422,9 +423,13 @@ $(window).on('load', function() {
         // If an error was returned, stop rotation and inform the user
         if (result.data.responseType == "Error") {
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
+          $('#train-model').show().css('display', 'flex');
+          $('#cancel-model').hide();
         }
         else if (result.data.hasOwnProperty("errorMessage")) {
           window.alert(result.data.errorMessage);
+          $('#train-model').show().css('display', 'flex');
+          $('#cancel-model').hide();
         }
         else {
           // Call monitor refresh function
