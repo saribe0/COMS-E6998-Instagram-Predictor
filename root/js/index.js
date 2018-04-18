@@ -481,7 +481,7 @@ $(window).on('load', function() {
 function uploadFileAndAnalyze(image) {
 
   // Prepare the request to the API
-  var params = {
+  var body = {
     requestType: "AnalyzeImage",
     user: AWS.config.credentials.identityId,
     image: image
