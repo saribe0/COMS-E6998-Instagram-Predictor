@@ -56,15 +56,24 @@
 						<img id="display_image" src="https://www.w3schools.com/howto/img_lights.jpg">
 					</div>
 					<div class="stat-block">
-						<div class="stats num">
-							<h4>Estimated Likes: </h4><p class="stat-p" id="likes-p">100</p>
+					  <div class="stats num">
+							<div class="stat-header">
+					    	<h4 style="">Estimated Likes: </h4>
+					    </div>
+					    <div class="stats-p">
+					      	<p id="likes-p">(Thinking...)</p>
+							</div>
 						</div>
 						<div class="stats num">
-							<h4>Estimated Comments: </h4><p class="stat-p" id="comments-p">100</p>
+							<div class="stat-header">
+					    	<h4>Estimated Comments: </h4>
+					    </div>
+					    <div class="stats-p">
+					      <p id="comments-p">(Thinking...)</p>
+							</div>
 						</div>
 					</div>
 				</div>
-				<input id="upload_image" type="file" onchange="upload_file()" accept="image/*">
 				<div class="action button" id="add-photo">
 					<h3>Analyze A New Image</h3>
 				</div>
@@ -82,7 +91,8 @@
 				<div class="action button" id="disconnect-instagram">
 					<h3>Disconnect Instagram</h3>
 				</div>
-				<div>
+				<input id="upload_image" type="file" onchange="upload_file()" accept="image/*">
+			</div>
 			</div>
 		</div>
 		<script type="text/javascript" src="js/amazon.js"></script>

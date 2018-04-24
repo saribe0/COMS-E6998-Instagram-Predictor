@@ -491,6 +491,9 @@ function uploadFileAndAnalyze(image) {
   apigClient.modelInferPost(null, body).then(function(result) {
       console.log(result);
 
+      $('#likes-p').text("(Thinking...)");
+      $('#comments-p').text("(Thinking...)");
+
       // If an error was returned, inform the user
       if (result.data.responseType == "Error") {
         window.alert(result.data.responseType + ": " + result.data.responseDetails);
@@ -502,10 +505,25 @@ function uploadFileAndAnalyze(image) {
       }
       else {
         // Update the view with the predicted values
+        try {
+          var likes = result.data.prediction.likes;
+          var comments = result.data.prediction.comments;
+        }
+        catch(err) {
+          var err2 = "(An Error Occured)"
+          $('#likes-p').text(err2);
+          $('#comments-p').text(err2);
+        }
+        if (likes != null && comments != null) {
+          $('#likes-p').text(likes.toString());
+          $('#comments-p').text(comments.toString());
+        }
+        else {
+          var err = "(An Error Occured)"
+          $('#likes-p').text(err);
+          $('#comments-p').text(err);
+        }
 
-
-
-        //
       }
   }).catch(function(result) {
       console.log(result);
@@ -526,7 +544,7 @@ function upload_file() {
 
     // Set the image on the screen
     preview.src = image;
-    $('#image-holder').show().css('display', 'flex');
+    $('#image-holder').show().css('display', 'block');
 
     // Upload and analyze the file
     uploadFileAndAnalyze(image);

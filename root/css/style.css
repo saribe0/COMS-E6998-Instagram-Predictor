@@ -98,7 +98,6 @@ input {
 .stat-block {
 	width: 100%;
 	margin-top: 15px;
-	display: flex;
 }
 
 .button {
@@ -111,9 +110,18 @@ input {
 	width: 100%;
 }
 
+.num {
+	display: flex;
+}
+
 .stats h4,
 .stats p {
 	display: inline;
+}
+
+.stat-header {
+	float: left;
+	width: 135px;
 }
 
 table{
