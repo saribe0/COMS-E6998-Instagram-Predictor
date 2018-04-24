@@ -161,11 +161,13 @@ table{
 
 #about_h2 {
 	-webkit-margin-before: 0em;
+	font-size: 20px;
 }
 
 #about_p {
 	-webkit-margin-before: 0em;
 	-webkit-margin-after: 0em;
+	font-size: 16px;
 }
 
 .image {

@@ -487,12 +487,12 @@ function uploadFileAndAnalyze(image) {
     image: image
   };
 
+  $('#likes-p').text("(Thinking...)");
+  $('#comments-p').text("(Thinking...)");
+
   // Make the API Request
   apigClient.modelInferPost(null, body).then(function(result) {
       console.log(result);
-
-      $('#likes-p').text("(Thinking...)");
-      $('#comments-p').text("(Thinking...)");
 
       // If an error was returned, inform the user
       if (result.data.responseType == "Error") {
@@ -515,8 +515,8 @@ function uploadFileAndAnalyze(image) {
           $('#comments-p').text(err2);
         }
         if (likes != null && comments != null) {
-          $('#likes-p').text(likes.toString());
-          $('#comments-p').text(comments.toString());
+          $('#likes-p').text(int(likes).toString());
+          $('#comments-p').text(int(comments).toString());
         }
         else {
           var err = "(An Error Occured)"
