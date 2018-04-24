@@ -10,13 +10,11 @@ var credentialKeys = [
 ];
 
 function showLoadingScreen() {
-  $('#loading_image').toggleClass('rotated');
   $('#loading').show().css('display', 'block');
 }
 
 function hideLoadingScreen() {
   $('#loading').hide();
-  $('#loading_image').toggleClass('rotated');
 }
 
 // Once logged in, redirect to logged in view

@@ -15,13 +15,11 @@ var hasModelDefault = true;
 var modelTimestampDefault = "N/A";
 
 function showLoadingScreen() {
-  $('#loading_image').toggleClass('rotated');
   $('#loading').show().css('display', 'block');
 }
 
 function hideLoadingScreen() {
   $('#loading').hide();
-  $('#loading_image').toggleClass('rotated');
 }
 
 function sleep(ms) {
