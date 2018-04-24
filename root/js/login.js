@@ -9,6 +9,16 @@ var credentialKeys = [
   'identityId'
 ];
 
+var finishedLogins = 0;
+
+function finishLogin() {
+  finishedLogins += 1;
+  console.log("Finished!");
+  if (finishedLogins == 3) {
+    hideLoadingScreen();
+  }
+}
+
 function showLoadingScreen() {
   $('#loading').show().css('display', 'block');
 }
@@ -39,7 +49,7 @@ $(window).on('load', function() {
   console.log('Logged in: ' + loggedIn);
   if (!loggedIn) {
     console.log('Currently not logged in.');
-    hideLoadingScreen();
+    finishLogin();
   } else {
     console.log('Stored credentials were found, verifying.');
 
@@ -58,7 +68,7 @@ $(window).on('load', function() {
         credentialKeys.forEach(function(key) {
           sessionStorage.removeItem(key);
         });
-        hideLoadingScreen();
+        finishLogin();
       } else {
         console.log('Credentials successfully loaded and/or refreshed.');
         redirectToLoggedIn();

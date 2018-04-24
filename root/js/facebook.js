@@ -46,6 +46,7 @@ function statusChangeCallback(response) {
     AWS.config.credentials.get(function(err) {
       if (err) {
 				console.log(err);
+        finishLogin();
 			}
 			else {
 				console.log('Secret: ' + AWS.config.credentials.secretAccessKey);
@@ -59,6 +60,7 @@ function statusChangeCallback(response) {
     });
   } else {
     console.log('There was a problem logging in with Facebook.');
+    finishLogin();
   }
 }
 

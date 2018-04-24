@@ -39,6 +39,7 @@ $(window).on('load', function() {
   					AWS.config.credentials.get(function(err){
   						if (err) {
   							console.log(err);
+                finishLogin();
   						}
   						else {
                 console.log('Secret: ' + AWS.config.credentials.secretAccessKey);
@@ -54,11 +55,13 @@ $(window).on('load', function() {
   				error: function(data) {
   					console.log(data);
             console.log('There was a problem logging in with InstaAnalytics');
+            finishLogin();
   				}
   			});
   		}
   		else {
   			console.log('No code, must be redirect for login');
+        finishLogin();
   		}
   }
 });
