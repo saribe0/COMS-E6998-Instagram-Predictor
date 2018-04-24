@@ -262,7 +262,7 @@ function checkInstagramInformation() {
         console.log(result);
 
         // Clean the url to remove the code
-        window.history.pushState({}, document.title, "/insta-analysis-project/index.html" );
+        window.history.pushState({}, document.title, "/image-analysis-project/index.html" );
 
         // If there was an error with the request, alert the user.
         if (result.data.responseType == "Error") {
