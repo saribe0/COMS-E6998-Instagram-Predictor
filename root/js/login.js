@@ -9,6 +9,16 @@ var credentialKeys = [
   'identityId'
 ];
 
+function showLoadingScreen() {
+  $('#loading_image').toggleClass('rotated');
+  $('#loading').show().css('display', 'block');
+}
+
+function hideLoadingScreen() {
+  $('#loading').hide();
+  $('#loading_image').toggleClass('rotated');
+}
+
 // Once logged in, redirect to logged in view
 function redirectToLoggedIn() {
   window.location = APPNAME + '/index.html';
@@ -18,6 +28,7 @@ function redirectToLoggedIn() {
 // - are saved for the session. If so, refresh and
 // - continue to next page.
 $(window).on('load', function() {
+  showLoadingScreen();
   var loggedIn = true;
   credentialKeys.forEach(function(key) {
     if (sessionStorage.getItem(key) == null) {
@@ -30,6 +41,7 @@ $(window).on('load', function() {
   console.log('Logged in: ' + loggedIn);
   if (!loggedIn) {
     console.log('Currently not logged in.');
+    hideLoadingScreen();
   } else {
     console.log('Stored credentials were found, verifying.');
 
@@ -48,6 +60,7 @@ $(window).on('load', function() {
         credentialKeys.forEach(function(key) {
           sessionStorage.removeItem(key);
         });
+        hideLoadingScreen();
       } else {
         console.log('Credentials successfully loaded and/or refreshed.');
         redirectToLoggedIn();

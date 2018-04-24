@@ -14,6 +14,16 @@ var keepRefreshing = false;
 var hasModelDefault = true;
 var modelTimestampDefault = "N/A";
 
+function showLoadingScreen() {
+  $('#loading_image').toggleClass('rotated');
+  $('#loading').show().css('display', 'block');
+}
+
+function hideLoadingScreen() {
+  $('#loading').hide();
+  $('#loading_image').toggleClass('rotated');
+}
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -140,6 +150,7 @@ function hasInstagramModel(hasModel, trainingInProgress, modelTimestamp) {
     keepRefreshing = false;
     $('#cancel-model').hide();
   }
+  hideLoadingScreen();
 }
 
 // Sends off an API request to verify the user has valid
@@ -178,6 +189,7 @@ function verifyInstagramConnection() {
 
   }).catch(function(result) {
       console.log(result);
+      hideLoadingScreen();
   });
 }
 
@@ -190,6 +202,7 @@ function redirectToNotLoggedIn() {
 // are saved for the session. If so, refresh and
 // continue. If not, clear them and send to login.
 $(window).on('load', function() {
+  showLoadingScreen();
   var loggedIn = true;
   credentialKeys.forEach(function(key) {
     if (sessionStorage.getItem(key) == null) {
@@ -307,6 +320,7 @@ function checkInstagramInformation() {
     // Get the error message and print to console (also
     // available in the url though.)
     var error = window.location.href.split('?error=')[1];
+    hideLoadingScreen();
     window.alert(error);
 		console.log(error);
   }
@@ -322,6 +336,8 @@ $(window).on('load', function() {
 
   // Logout handler
   document.getElementById('logout').onclick = function() {
+
+    showLoadingScreen();
 
     // Clear AWS credentials
     AWS.config.credentials = null;
@@ -378,6 +394,7 @@ $(window).on('load', function() {
   document.getElementById('disconnect-instagram').onclick = function() {
 
     console.log("Disconnect clicked");
+    showLoadingScreen();
 
     // Send request to AWS API Gateway to disconnect the user
     var body = {
@@ -392,20 +409,22 @@ $(window).on('load', function() {
 
           // Unable to disconnect the user
           window.alert(result.data.responseType + ": " + result.data.responseDetails);
+          hideLoadingScreen();
         }
         else if (result.data.hasOwnProperty("errorMessage")) {
           window.alert(result.data.errorMessage);
+          hideLoadingScreen();
         }
         if (result.data.authenticated == false) {
+
+          // User is disconnected
+          connectedToInstagram(false);
 
           // Call monitor refresh function
           var hasModel = result.data.hasModel;
           var modelInTraining = result.data.trainingInProgress;
           var modelTimestamp = result.data.modelTimestamp;
           hasInstagramModel(hasModel, modelInTraining, modelTimestamp);
-
-          // User is disconnected
-          connectedToInstagram(false);
         }
     }).catch(function(result) {
         console.log(result);
