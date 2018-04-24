@@ -72,3 +72,10 @@ body {
   color: white;
 	cursor: pointer;
 }
+
+#privterms {
+	position: absolute;
+	bottom: 10px;
+	text-align: center;
+	width: 100%;
+}
