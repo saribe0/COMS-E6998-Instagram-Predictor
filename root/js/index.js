@@ -12,6 +12,7 @@ var credentialKeys = [
 
 var keepRefreshing = false;
 var hasModelDefault = true;
+var modelTimestampDefault = "N/A";
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -50,13 +51,14 @@ async function monitorRefresh() {
           // Call monitor refresh function
           var hasModel = result.data.hasModel;
           var modelInTraining = result.data.modelStatus.inProgress;
+          var modelTimestamp = result.data.modelTimestamp;
 
           // If the model has finished training
           if (!modelInTraining) {
             console.log("Finished building model");
             keepRefreshing = false;
             $("#cancel-model").css("background", "white")
-            hasInstagramModel(hasModel, false);
+            hasInstagramModel(hasModel, false, modelTimestamp);
           }
           else {
             var completedImages = result.data.modelStatus.completedImages;
@@ -94,13 +96,19 @@ function connectedToInstagram(isConnected) {
   }
 }
 
-function hasInstagramModel(hasModel, trainingInProgress) {
+function hasInstagramModel(hasModel, trainingInProgress, modelTimestamp) {
 
   if (hasModel == null) {
     hasModel = hasModelDefault;
   }
   else {
     hasModelDefault = hasModel;
+  }
+  if (modelTimestamp == null) {
+    modelTimestamp = modelTimestampDefault;
+  }
+  else {
+    modelTimestampDefault = modelTimestamp;
   }
 
   // Show and hide the different action boxes
@@ -113,7 +121,7 @@ function hasInstagramModel(hasModel, trainingInProgress) {
   }
   else if (hasModel && !trainingInProgress) {
     $('#add-photo').show().css('display', 'flex');
-    document.getElementById("train-model-text").innerHTML = "Valid Model Found. Re-Train?";
+    document.getElementById("train-model-text").innerHTML = "Model Last Trained On " + modelTimestamp + " UTC. Would You Like To Re-Train?";
     keepRefreshing = false;
     $('#train-model').show().css('display', 'flex');
     $('#cancel-model').hide();
@@ -165,7 +173,8 @@ function verifyInstagramConnection() {
       // If the user is connectd, get the users model and training status
       var userHasModel = result.data.hasModel;
       var modelInTraining = result.data.trainingInProgress;
-      hasInstagramModel(userHasModel, modelInTraining);
+      var modelTimestamp = result.data.modelTimestamp;
+      hasInstagramModel(userHasModel, modelInTraining, modelTimestamp);
 
   }).catch(function(result) {
       console.log(result);
@@ -284,7 +293,8 @@ function checkInstagramInformation() {
           // Also get the users model and training status
           var userHasModel = result.data.hasModel;
           var modelInTraining = result.data.trainingInProgress;
-          hasInstagramModel(userHasModel, modelInTraining);
+          var modelTimestamp = result.data.modelTimestamp;
+          hasInstagramModel(userHasModel, modelInTraining, modelTimestamp);
         }
 
   	}).catch(function(result) {
@@ -391,7 +401,8 @@ $(window).on('load', function() {
           // Call monitor refresh function
           var hasModel = result.data.hasModel;
           var modelInTraining = result.data.trainingInProgress;
-          hasInstagramModel(hasModel, modelInTraining);
+          var modelTimestamp = result.data.modelTimestamp;
+          hasInstagramModel(hasModel, modelInTraining, modelTimestamp);
 
           // User is disconnected
           connectedToInstagram(false);
@@ -435,7 +446,8 @@ $(window).on('load', function() {
           // Call monitor refresh function
           var hasModel = result.data.hasModel;
           var modelInTraining = result.data.trainingInProgress;
-          hasInstagramModel(hasModel, modelInTraining);
+          var modelTimestamp = result.data.modelTimestamp;
+          hasInstagramModel(hasModel, modelInTraining, modelTimestamp);
         }
     }).catch(function(result) {
         console.log(result);
@@ -470,7 +482,8 @@ $(window).on('load', function() {
         else {
           // Call monitor refresh function
           var hasModel = result.data.hasModel;
-          hasInstagramModel(hasModel, false);
+          var modelTimestamp = result.data.modelTimestamp;
+          hasInstagramModel(hasModel, false, modelTimestamp);
         }
     }).catch(function(result) {
         console.log(result);
@@ -506,8 +519,8 @@ function uploadFileAndAnalyze(image) {
       else {
         // Update the view with the predicted values
         try {
-          var likes = result.data.prediction.likes;
-          var comments = result.data.prediction.comments;
+          var likes = parseInt(result.data.prediction.likes);
+          var comments = parseInt(result.data.prediction.comments);
         }
         catch(err) {
           var err2 = "(An Error Occured)"
@@ -515,8 +528,8 @@ function uploadFileAndAnalyze(image) {
           $('#comments-p').text(err2);
         }
         if (likes != null && comments != null) {
-          $('#likes-p').text(int(likes).toString());
-          $('#comments-p').text(int(comments).toString());
+          $('#likes-p').text(likes.toString());
+          $('#comments-p').text(comments.toString());
         }
         else {
           var err = "(An Error Occured)"
