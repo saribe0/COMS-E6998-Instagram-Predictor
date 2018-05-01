@@ -187,7 +187,8 @@ function verifyInstagramConnection() {
 
   }).catch(function(result) {
       console.log(result);
-      hideLoadingScreen();
+      window.alert("It appears your session has ended. Please sign in again.");
+      logout();
   });
 }
 
@@ -310,6 +311,8 @@ function checkInstagramInformation() {
 
   	}).catch(function(result) {
         console.log(result)
+        window.alert("It appears your session has ended. Please sign in again.");
+        logout();
   	});
   }
   // Else if there's an error
@@ -329,39 +332,43 @@ function checkInstagramInformation() {
   }
 }
 
+function logout() {
+
+  showLoadingScreen();
+
+  // Clear AWS credentials
+  AWS.config.credentials = null;
+  apigClient = null;
+
+  // Clear sessionStorage
+  credentialKeys.forEach(function(key) {
+    sessionStorage.removeItem(key);
+  });
+  sessionStorage.removeItem('type');
+  sessionStorage.removeItem('region');
+
+  // Call individual logout functions
+  switch(identityType) {
+    case 'Facebook':
+      facebookLogout();
+      break;
+    case 'Amazon':
+      amazonLogout();
+      break;
+    case 'InstaAnalytics':
+      instaAnalyticsLogout();
+      break;
+    default:
+      break;
+  }
+}
+
 // On load, register the handler for the logout button.
 $(window).on('load', function() {
 
   // Logout handler
   document.getElementById('logout').onclick = function() {
-
-    showLoadingScreen();
-
-    // Clear AWS credentials
-    AWS.config.credentials = null;
-    apigClient = null;
-
-    // Clear sessionStorage
-    credentialKeys.forEach(function(key) {
-      sessionStorage.removeItem(key);
-    });
-    sessionStorage.removeItem('type');
-    sessionStorage.removeItem('region');
-
-    // Call individual logout functions
-    switch(identityType) {
-      case 'Facebook':
-        facebookLogout();
-        break;
-      case 'Amazon':
-        amazonLogout();
-        break;
-      case 'InstaAnalytics':
-        instaAnalyticsLogout();
-        break;
-      default:
-        break;
-    }
+    logout();
   }
 });
 
@@ -424,8 +431,10 @@ $(window).on('load', function() {
           var modelTimestamp = result.data.modelTimestamp;
           hasInstagramModel(hasModel, modelInTraining, modelTimestamp);
         }
-    }).catch(function(result) {
-        console.log(result);
+    }).catch(function(err) {
+        console.log(err);
+        window.alert("It appears your session has ended. Please sign in again.");
+        logout();
     });
   };
 });
@@ -468,6 +477,8 @@ $(window).on('load', function() {
         }
     }).catch(function(result) {
         console.log(result);
+        window.alert("It appears your session has ended. Please sign in again.");
+        logout();
     });
   };
 });
@@ -504,6 +515,8 @@ $(window).on('load', function() {
         }
     }).catch(function(result) {
         console.log(result);
+        window.alert("It appears your session has ended. Please sign in again.");
+        logout();
     });
   };
 });
@@ -557,6 +570,8 @@ function uploadFileAndAnalyze(image) {
       }
   }).catch(function(result) {
       console.log(result);
+      window.alert("It appears your session has ended. Please sign in again.");
+      logout();
   });
 }
 
