@@ -76,6 +76,7 @@ h3 {
 	position: relative;
 	border-radius: 10px;
 	box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+	z-index: 1;
 }
 
 #login-instagram {
@@ -171,7 +172,7 @@ table{
 
 #privterms {
 	position: absolute;
-	bottom: 10px;
+	bottom: 0px;
 	text-align: center;
 	width: 100%;
 }
@@ -196,6 +197,15 @@ table{
 #loading_image {
 	width: 150px;
 	height: 150px;
+}
+
+#homepage {
+	position: absolute;
+	right: 0px;
+	top: 50%;
+	transform: translate(-140%, -125%);
+	vertical-align: middle;
+	cursor: pointer;
 }
 
 .rotated {
