@@ -4,6 +4,9 @@ COMS E6998 Cloud Computing and Big Data Project: A website to predict the likes 
 ## Site Link
 https://s3.us-east-1.amazonaws.com/image-analysis-project/login.html</br>
 
+## Demo Video
+https://www.youtube.com/watch?v=hYAPURgjEL4&feat+ure=youtu.be
+
 ## Repository Structure
 This git repository contains the website source code, lambda function source code, api description, and documentation. The following four sections explain each of these in more depth.
 
